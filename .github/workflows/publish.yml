@@ -1,0 +1,11 @@
+# Dummy job to test triggering on job completion
+
+name: Full Clients Publish
+
+on: workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo Hello world!
