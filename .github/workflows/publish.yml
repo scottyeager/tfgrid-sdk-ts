@@ -2,7 +2,10 @@
 
 name: Full Clients Publish
 
-on: workflow_dispatch
+on:
+  push:
+    tags:
+      - "**"
 
 jobs:
   test:
