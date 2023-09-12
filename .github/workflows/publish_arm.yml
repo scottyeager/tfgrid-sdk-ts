@@ -1,10 +1,9 @@
 name: Publish ARM
 
 on:
-  workflow_run:
-    workflows: ["Full Clients Publish"]
-    types:
-      - completed
+  push:
+    tags:
+      - "**"
 
 jobs:
   docker-image-grid-http-server:
@@ -13,23 +12,8 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: 'Get tag'
-        id: tag
-        uses: actions/github-script@v6
-        with:
-          result-encoding: string
-          script: |
-            let run = await github.rest.actions.getWorkflowRun({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               run_id: context.payload.workflow_run.id,
-            });
-            return run.data.head_branch;
-
       - name: Checkout the repo
         uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.tag.outputs.result }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -64,4 +48,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            GRID_VERSION=${{ steps.tag.outputs.result }}
+            GRID_VERSION=2.1.0
